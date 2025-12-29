@@ -1,0 +1,135 @@
+// =========================================
+// CAPITÁN CENTELLA – FIGURA ARTICULADA 18 CM
+// OpenSCAD – listo para exportar STL
+// =========================================
+
+$fn = 64;
+
+// --------- SELECCIÓN DE PARTE ----------
+parte = "todo";
+// Opciones:
+// todo, cabeza, torso_izq, torso_der,
+// brazo_sup, antebrazo,
+// muslo, pierna_inf,
+// mano_abierta, mano_cerrada,
+// capa, base, arma
+
+// --------- PARÁMETROS ----------
+tol = 0.3;
+radio_perno = 4;
+largo_perno = 6;
+
+// --------- ARTICULACIONES ----------
+module perno() {
+    cylinder(h=largo_perno, r=radio_perno);
+}
+
+module hueco() {
+    cylinder(h=largo_perno+1, r=radio_perno+tol);
+}
+
+// --------- CABEZA / CASCO ----------
+module cabeza() {
+    difference() {
+        sphere(r=18);
+        translate([0,0,-20])
+            cube([50,50,40], center=true);
+    }
+}
+
+// --------- TORSO (MITADES) ----------
+module torso_izq() {
+    cube([40,25,55], center=true);
+}
+
+module torso_der() {
+    cube([40,25,55], center=true);
+}
+
+// --------- BRAZOS ----------
+module brazo_sup() {
+    difference() {
+        cylinder(h=30, r=7);
+        translate([0,0,24]) hueco();
+    }
+}
+
+module antebrazo() {
+    difference() {
+        cylinder(h=28, r=6);
+        translate([0,0,0]) hueco();
+    }
+}
+
+// --------- MANOS ----------
+module mano_abierta() {
+    cube([14,4,16], center=true);
+}
+
+module mano_cerrada() {
+    difference() {
+        cube([12,12,16], center=true);
+        rotate([90,0,0])
+            cylinder(h=16, r=4, center=true);
+    }
+}
+
+// --------- PIERNAS ----------
+module muslo() {
+    difference() {
+        cylinder(h=35, r=8);
+        translate([0,0,28]) hueco();
+    }
+}
+
+module pierna_inf() {
+    difference() {
+        cylinder(h=40, r=7);
+        translate([0,0,0]) hueco();
+    }
+}
+
+// --------- CAPA ----------
+module capa() {
+    translate([0,-15,40])
+        cube([70,3,90], center=true);
+}
+
+// --------- BASE ----------
+module base() {
+    cylinder(h=6, r=45);
+}
+
+// --------- ARMA ----------
+module arma() {
+    union() {
+        cylinder(h=60, r=2);
+        translate([0,0,60])
+            sphere(r=3);
+    }
+}
+
+// --------- ENSAMBLE VISUAL ----------
+module todo() {
+    translate([0,0,140]) cabeza();
+    translate([0,0,95]) torso_izq();
+    translate([-28,0,95]) brazo_sup();
+    translate([28,0,95]) brazo_sup();
+    translate([0,0,55]) muslo();
+    translate([0,0,0]) base();
+}
+
+// --------- MOSTRAR PARTE ----------
+if (parte=="cabeza") cabeza();
+else if (parte=="torso_izq") torso_izq();
+else if (parte=="torso_der") torso_der();
+else if (parte=="brazo_sup") brazo_sup();
+else if (parte=="antebrazo") antebrazo();
+else if (parte=="muslo") muslo();
+else if (parte=="pierna_inf") pierna_inf();
+else if (parte=="mano_abierta") mano_abierta();
+else if (parte=="mano_cerrada") mano_cerrada();
+else if (parte=="capa") capa();
+else if (parte=="base") base();
+else if (parte=="arma") arma();
+else todo();
